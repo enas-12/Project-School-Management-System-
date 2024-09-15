@@ -10,9 +10,16 @@ class Student:
         self.Gender = Gender
         self.Grade = Grade  # Assuming Grade is a list of numbers representing grades
 
+    def Calculate_Average(self):
+        if len(self.Grade) == 0:
+            return 0
+        return sum(self.Grade) / len(self.Grade)
+
+    # Example grade list
     def display(self):
         print(f"The details of Student1 are ({self.name}, {self.age}, {self.ID}, {self.Grade}, and {self.Gender})")
-       
+        print(f"Average Grade: {self.Calculate_Average()}")
 
-Student1 = Student("Enas", "Female", "14th", 500, 16, min_length=6, max_length=10)
+grade = [85, 90, 78]    
+Student1 = Student("Enas", "Female", grade , 500, 16, min_length=6, max_length=10)
 Student1.display()
