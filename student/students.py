@@ -1,25 +1,20 @@
+# student.py
+
+import peewee
 import shortuuid
-import random
+from database_setup import BaseModel
 
-class Student:
-    students_data = []
-    def __init__(self, Name, Gender, Grade,Student_class, ID, Age, min_length=6, max_length=10):
-        self.name = Name
-        self.age = Age
-        self.Student_class = Student_class
-        uuid_length = random.randint(min_length, max_length)
-        self.ID = str(shortuuid.ShortUUID().random(length=uuid_length))
-        self.Gender = Gender
-        self.Grade = Grade  # Assuming Grade is a list of numbers representing grades
+class Student(BaseModel):
+    id = peewee.CharField(primary_key=True, default=shortuuid.uuid)
+    name = peewee.CharField(max_length=50)
+    gender = peewee.CharField(max_length=1, choices=[('M', 'Male'), ('F', 'Female')])
+    age = peewee.IntegerField()
+    student_class = peewee.IntegerField()
+    grades = peewee.TextField()  # Store grades as a comma-separated string
 
-    def Calculate_Average(self):
-        if len(self.Grade) == 0:
-            return 0
-        return sum(self.Grade) / len(self.Grade)
+    def calculate_average(self):
+        grades = list(map(int, self.grades.split(',')))
+        return sum(grades) / len(grades) if grades else 0
 
-    # Example grade list
-    def display(self):
-        print(f"The details of Student1 are ({self.name},{self.age} years old ,in {self.Student_class}th , her ID is {self.ID} and {self.Gender})")
-        print(f"Average Grade: {self.Calculate_Average()}")
-
-
+    def __str__(self):
+        return f"{self.name} (ID: {self.id})"
