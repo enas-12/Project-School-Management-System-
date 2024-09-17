@@ -23,12 +23,27 @@ def Find(self,uuid,name):
        return  "No Student is exist"
 
 #to Remove Student according the search i got    
-def Remove(self):
+def Remove(self,uuid):
     if self.Find.uuid == self.Student.ID:
         self.Student.remove()
         return "{self.name} had been Removed"
     return None
-    
+
+def Calculate_Status(self,uuid):
+    student = self.find.uuid
+    if student:
+       avg = Student.Calculate_Average()
+       if avg < 50:
+          self.Remove(uuid)
+          return f"{student.name} failed and removed"
+    elif 50 <= avg <= 60:
+          return f"{student.name} will stay"
+    else:
+        return f"{student.name} passed"
+    return "student not found"
+       
+       
+       
 
 
 
