@@ -43,7 +43,18 @@ def Calculate_Status(self,uuid):
     return "student not found"
        
        
-       
+
+def filter(self,status):
+    filter_data = []
+    for student in self.student:
+        avg = student.Calculate_Status()
+        if status == "fail" and avg < 50:
+            filter_data.append(student)
+        elif status == "stay" and 50 <= avg <= 60:
+            filter_data.append(student)
+        elif status == "pass" and avg >60:
+            filter_data.append(student)
+    return filter
 
 
 
