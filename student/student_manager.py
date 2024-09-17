@@ -39,7 +39,7 @@ def Calculate_Status(self,uuid):
     elif 50 <= avg <= 60:
           return f"{student.name} will stay"
     else:
-        return f"{student.name} passed"
+        return f"{student.name} passed {int(student.Student_class)+1}"
     return "student not found"
        
        
