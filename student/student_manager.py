@@ -1,61 +1,60 @@
-#to Recall the intialization data from Student file 
-from students import Student
+from student import Student
+from database_setup import Session
 
-#to add the feature and authorization for Manager 
 class Manager:
     def __init__(self):
-        self.student = []
-        
-#to Add new student "Manual insertion"
-def add (self, Name, Gender, Grade,Student_class, Age):
-    New_student = Student(Name, Gender, Grade,Student_class, Age)
-    self.student.append(New_student)
-    return New_student 
+        self.session = Session()
 
+    # Add a new student
+    def add(self, Name, Gender, Grade, Student_class, Age):
+        new_student = Student(Name=Name, Gender=Gender, Grade=Grade, Student_class=Student_class, Age=Age)
+        self.session.add(new_student)
+        self.session.commit()
+        return new_student
 
-#to add function of Searching with ID & Name 
-def Find(self,uuid,name):
-   for Student in self.student:       
-       if name.lower() == self.Student():
-        return self.student()
-       elif uuid == self.Student():
-        return self.student()
-       return  "No Student is exist"
+    # Search for a student by ID or Name
+    def find(self, uuid=None, name=None):
+        if uuid:
+            return self.session.query(Student).filter_by(ID=uuid).first()
+        elif name:
+            return self.session.query(Student).filter_by(Name=name).first()
+        return None
 
-#to Remove Student according the search i got    
-def Remove(self,uuid):
-    if self.Find.uuid == self.Student.ID:
-        self.Student.remove()
-        return "{self.name} had been Removed"
-    return None
+    # Remove a student by ID
+    def remove(self, uuid):
+        student = self.find(uuid=uuid)
+        if student:
+            self.session.delete(student)
+            self.session.commit()
+            return f"{student.Name} has been removed."
+        return "Student not found"
 
-def Calculate_Status(self,uuid):
-    student = self.find.uuid
-    if student:
-       avg = Student.Calculate_Average()
-       if avg < 50:
-          self.Remove(uuid)
-          return f"{student.name} failed and removed"
-    elif 50 <= avg <= 60:
-          return f"{student.name} will stay"
-    else:
-        return f"{student.name} passed {int(student.Student_class)+1}"
-    return "student not found"
-       
-       
+    # Calculate student status
+    def calculate_status(self, uuid):
+        student = self.find(uuid=uuid)
+        if student:
+            avg = student.Calculate_Average()
+            if avg < 50:
+                self.remove(uuid)
+                return f"{student.Name} failed and has been removed."
+            elif 50 <= avg <= 60:
+                return f"{student.Name} will stay in the current class."
+            else:
+                student.Student_class += 1
+                self.session.commit()
+                return f"{student.Name} has passed to class {student.Student_class}."
+        return "Student not found"
 
-def filter(self,status):
-    filter_data = []
-    for student in self.student:
-        avg = student.Calculate_Status()
-        if status == "fail" and avg < 50:
-            filter_data.append(student)
-        elif status == "stay" and 50 <= avg <= 60:
-            filter_data.append(student)
-        elif status == "pass" and avg >60:
-            filter_data.append(student)
-    return filter
-
-
-
-
+    # Filter students based on their status (pass, fail, stay)
+    def filter(self, status):
+        students = self.session.query(Student).all()
+        filtered_students = []
+        for student in students:
+            avg = student.Calculate_Average()
+            if status == "fail" and avg < 50:
+                filtered_students.append(student)
+            elif status == "stay" and 50 <= avg <= 60:
+                filtered_students.append(student)
+            elif status == "pass" and avg > 60:
+                filtered_students.append(student)
+        return filtered_students
