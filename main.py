@@ -1,10 +1,8 @@
-# main.py
-
-from student.student_manager import Manager
+from student_manager import Manager
 
 def main():
     manager = Manager()
-    
+
     while True:
         print("\nStudent Management System")
         print("1. Add Student")
@@ -12,9 +10,9 @@ def main():
         print("3. Remove Student")
         print("4. Calculate Status")
         print("5. Exit")
-        
+
         choice = input("Enter your choice: ")
-        
+
         if choice == '1':
             name = input("Enter name: ")
             gender = input("Enter gender (M/F): ")
@@ -23,7 +21,7 @@ def main():
             grades = list(map(int, input("Enter grades (comma-separated): ").split(',')))
             manager.add(name, gender, grades, student_class, age)
             print(f"Student {name} added successfully!")
-            
+
         elif choice == '2':
             search_by = input("Search by (1. ID, 2. Name): ")
             if search_by == '1':
@@ -32,21 +30,21 @@ def main():
             else:
                 name = input("Enter student name: ")
                 student = manager.find(name=name)
-            print(student)
-        
+
         elif choice == '3':
             uuid = input("Enter student ID to remove: ")
             message = manager.remove(uuid)
             print(message)
-            
+
         elif choice == '4':
             uuid = input("Enter student ID: ")
             status = manager.calculate_status(uuid)
             print(status)
-        
+
         elif choice == '5':
             print("Exiting...")
             break
+
 
 if __name__ == "__main__":
     main()
